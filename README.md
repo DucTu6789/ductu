@@ -454,6 +454,3 @@ MIT License. Xem chi tiết trong [LICENSE](LICENSE).
 
 Copyright (c) 2026 Duc Tu.
 
-Bạn vẫn giữ bản quyền của project. License này cho phép người khác xem, tải,
-sử dụng, sửa đổi và phân phối lại code, miễn là họ giữ lại thông báo copyright
-và nội dung license.
