@@ -1,9 +1,9 @@
 # ductu
 
-`ductu` la CLI recon viet bang Go, dung de scan subdomain va directory/web path
-trong moi truong lab, CTF, hoac pentest duoc uy quyen.
+`ductu` là CLI recon viết bằng Go, dùng để scan subdomain và directory/web path
+trong môi trường lab, CTF, hoặc pentest được ủy quyền.
 
-Tool chi dung Go standard library, khong can thu vien ben thu ba.
+Tool chỉ dùng Go standard library, không cần thư viện bên thứ ba.
 
 ```text
   ____              _______
@@ -13,35 +13,35 @@ Tool chi dung Go standard library, khong can thu vien ben thu ba.
  |____/ \__,_|\___|   |_|  \__,_|
 ```
 
-> Chi su dung voi he thong ban so huu hoac duoc phep kiem thu. Khong scan he
-> thong khong duoc uy quyen.
+> Chỉ sử dụng với hệ thống bạn sở hữu hoặc được phép kiểm thử. Không scan hệ
+> thống khi chưa được ủy quyền.
 
-## Tinh nang chinh
+## Tính năng chính
 
-- Scan subdomain bang wordlist DNS.
-- Scan directory/path bang wordlist Web-Content.
-- Co 3 mode ro rang: `sub`, `dir`, `all`.
-- Mode cu bang flag `-d/-ws/-u/-wd` van hoat dong.
-- Wildcard DNS detection de loc subdomain nhieu.
-- Soft-404 calibration de loc path gia.
-- Recursive directory scan, mac dinh depth la `4`.
+- Scan subdomain bằng wordlist DNS.
+- Scan directory/path bằng wordlist Web-Content.
+- Có 3 mode rõ ràng: `sub`, `dir`, `all`.
+- Mode cũ bằng flag `-d/-ws/-u/-wd` vẫn hoạt động.
+- Wildcard DNS detection để lọc subdomain nhiễu.
+- Soft-404 calibration để lọc path giả.
+- Recursive directory scan, mặc định depth là `4`.
 - Filter theo status code, size, words, lines, regex body.
-- Extension mode: append/replace, co prefix/suffix path.
-- Dedup body hash de giam ket qua trung noi dung.
+- Extension mode: append/replace, có prefix/suffix path.
+- Dedup body hash để giảm kết quả trùng nội dung.
 - Rate limit, retry, custom DNS resolver.
-- Resume state va JSON report.
-- Output table co mau, co cot `WORDS` va `LINES`.
+- Resume state và JSON report.
+- Output table có màu, có cột `WORDS` và `LINES`.
 
-## Cai dat tren Kali
+## Cài đặt trên Kali
 
-Cai Go va SecLists:
+Cài Go và SecLists:
 
 ```bash
 sudo apt update
 sudo apt install -y golang seclists
 ```
 
-Giai nen project:
+Giải nén project:
 
 ```bash
 unzip ductu.zip
@@ -54,33 +54,33 @@ Build:
 go build -o ductu .
 ```
 
-Chay thu:
+Chạy thử:
 
 ```bash
 ./ductu -h
 ```
 
-Muon goi `ductu` o moi noi:
+Muốn gọi `ductu` ở mọi nơi:
 
 ```bash
 sudo cp ./ductu /usr/local/bin/ductu
 ductu -h
 ```
 
-Neu gap loi:
+Nếu gặp lỗi:
 
 ```text
 go: go.mod file not found
 ```
 
-Thi ban dang build sai thu muc. Hay vao dung thu muc project:
+Nghĩa là bạn đang build sai thư mục. Hãy vào đúng thư mục project:
 
 ```bash
 cd ~/ductu
 go build -o ductu .
 ```
 
-## Cach dung nhanh
+## Cách dùng nhanh
 
 Scan subdomain:
 
@@ -94,7 +94,7 @@ Scan directory:
 ductu dir https://example.com -wd /usr/share/seclists/Discovery/Web-Content/common.txt
 ```
 
-Scan ca subdomain va directory:
+Scan cả subdomain và directory:
 
 ```bash
 ductu all https://example.com \
@@ -102,7 +102,7 @@ ductu all https://example.com \
   -wd /usr/share/seclists/Discovery/Web-Content/common.txt
 ```
 
-Scan directory kem extension:
+Scan directory kèm extension:
 
 ```bash
 ductu dir http://target.htb \
@@ -110,10 +110,10 @@ ductu dir http://target.htb \
   -e php,txt,bak
 ```
 
-Luu y: neu khong truyen `-e`, tool chi scan path goc trong wordlist. Vi du
-`admin` se chi thanh `/admin`, khong tu sinh `/admin.php`, `/admin.txt`.
+Lưu ý: nếu không truyền `-e`, tool chỉ scan path gốc trong wordlist. Ví dụ
+`admin` sẽ chỉ thành `/admin`, không tự sinh `/admin.php`, `/admin.txt`.
 
-## 3 mode chinh
+## 3 mode chính
 
 ### 1. Subdomain mode
 
@@ -121,13 +121,13 @@ Luu y: neu khong truyen `-e`, tool chi scan path goc trong wordlist. Vi du
 ductu sub <domain> -ws <sub_wordlist>
 ```
 
-Vi du:
+Ví dụ:
 
 ```bash
 ductu sub bedside.htb -ws subs.txt
 ```
 
-Flag hay dung:
+Flag hay dùng:
 
 ```bash
 ductu sub bedside.htb -ws subs.txt -ct -dns-extra -permute
@@ -139,7 +139,7 @@ ductu sub bedside.htb -ws subs.txt -ct -dns-extra -permute
 ductu dir <base_url> -wd <dir_wordlist>
 ```
 
-Vi du:
+Ví dụ:
 
 ```bash
 ductu dir http://bedside.htb -wd common.txt -e php,txt,bak
@@ -157,7 +157,7 @@ ductu dir http://bedside.htb -wd common.txt -r -depth 4
 ductu all <base_url> -ws <sub_wordlist> -wd <dir_wordlist>
 ```
 
-Vi du:
+Ví dụ:
 
 ```bash
 ductu all http://bedside.htb \
@@ -166,80 +166,80 @@ ductu all http://bedside.htb \
   -e php,txt,bak
 ```
 
-Trong `all` mode, neu ban dua vao `http://example.com`, tool tu lay domain
-`example.com` de scan subdomain. Neu muon override domain thi them `-d`:
+Trong `all` mode, nếu bạn đưa vào `http://example.com`, tool tự lấy domain
+`example.com` để scan subdomain. Nếu muốn override domain thì thêm `-d`:
 
 ```bash
 ductu all http://app.example.com -d example.com -ws subs.txt -wd common.txt
 ```
 
-## Flag quan trong
+## Flag quan trọng
 
 ### Global
 
-| Flag | Mac dinh | Y nghia |
+| Flag | Mặc định | Ý nghĩa |
 | --- | --- | --- |
-| `-t` | `50` | So worker chay song song |
-| `-timeout` | `4` | Timeout moi request, tinh bang giay |
-| `-rate` | `0` | Gioi han request/resolve moi giay, `0` la khong gioi han |
-| `-retries` | `0` | So lan retry khi loi DNS/HTTP |
-| `-retry-delay` | `500ms` | Delay co ban giua cac lan retry |
+| `-t` | `50` | Số worker chạy song song |
+| `-timeout` | `4` | Timeout mỗi request, tính bằng giây |
+| `-rate` | `0` | Giới hạn request/resolve mỗi giây, `0` là không giới hạn |
+| `-retries` | `0` | Số lần retry khi lỗi DNS/HTTP |
+| `-retry-delay` | `500ms` | Delay cơ bản giữa các lần retry |
 | `-resume` | | File resume JSON |
 | `-o` | | Ghi report JSON |
-| `-no-color` | `false` | Tat mau ANSI |
-| `-no-banner` | `false` | Tat banner luc khoi dong |
-| `-list-wordlists` | `false` | In wordlist SecLists goi y |
+| `-no-color` | `false` | Tắt màu ANSI |
+| `-no-banner` | `false` | Tắt banner lúc khởi động |
+| `-list-wordlists` | `false` | In wordlist SecLists gợi ý |
 
 ### Subdomain
 
-| Flag | Y nghia |
+| Flag | Ý nghĩa |
 | --- | --- |
-| `-d` | Domain goc, vi du `example.com` |
+| `-d` | Domain gốc, ví dụ `example.com` |
 | `-ws` | Wordlist subdomain |
-| `-ct` | Lay them hostname tu crt.sh |
-| `-permute` | Tao bien the subdomain sau pass resolve dau |
-| `-dns-server` | DNS resolver rieng, vi du `1.1.1.1:53` |
-| `-dns-extra` | Lookup MX/NS/TXT va lay hostname tim thay |
+| `-ct` | Lấy thêm hostname từ crt.sh |
+| `-permute` | Tạo biến thể subdomain sau pass resolve đầu |
+| `-dns-server` | DNS resolver riêng, ví dụ `1.1.1.1:53` |
+| `-dns-extra` | Lookup MX/NS/TXT và lấy hostname tìm thấy |
 
 ### Directory
 
-| Flag | Mac dinh | Y nghia |
+| Flag | Mặc định | Ý nghĩa |
 | --- | --- | --- |
-| `-u` | | Base URL, vi du `https://target.lab` |
+| `-u` | | Base URL, ví dụ `https://target.lab` |
 | `-wd` | | Wordlist directory/path |
-| `-e` | | Extension CSV, vi du `php,html,txt,bak` |
-| `-ext-mode` | `append` | `append` hoac `replace` voi `%EXT%` |
-| `-no-extension` | `false` | Bo qua logic extension |
-| `-prefixes` | | Tao them bien the prefix, CSV |
-| `-suffixes` | | Tao them bien the suffix, CSV |
-| `-r` | `false` | Bat recursive scan |
-| `-recursive` | `false` | Giong `-r` |
-| `-depth` | `4` | Do sau recursive toi da |
-| `-recursion-strategy` | `default` | `default` hoac `greedy` |
-| `-exclude-subdirs` | | Bo qua segment path khi recursive, CSV |
+| `-e` | | Extension CSV, ví dụ `php,html,txt,bak` |
+| `-ext-mode` | `append` | `append` hoặc `replace` với `%EXT%` |
+| `-no-extension` | `false` | Bỏ qua logic extension |
+| `-prefixes` | | Tạo thêm biến thể prefix, CSV |
+| `-suffixes` | | Tạo thêm biến thể suffix, CSV |
+| `-r` | `false` | Bật recursive scan |
+| `-recursive` | `false` | Giống `-r` |
+| `-depth` | `4` | Độ sâu recursive tối đa |
+| `-recursion-strategy` | `default` | `default` hoặc `greedy` |
+| `-exclude-subdirs` | | Bỏ qua segment path khi recursive, CSV |
 
 ### HTTP
 
-| Flag | Y nghia |
+| Flag | Ý nghĩa |
 | --- | --- |
-| `-H` | Them HTTP header, co the lap lai: `-H 'Name: value'` |
-| `-cookie` | Gan raw Cookie header |
-| `-auth` | Basic Auth dang `username:password` |
-| `-proxy` | HTTP proxy, vi du `http://127.0.0.1:8080` |
-| `-k` | Bo qua TLS verify |
-| `-follow` | Follow redirect thay vi chi in 3xx + Location |
+| `-H` | Thêm HTTP header, có thể lặp lại: `-H 'Name: value'` |
+| `-cookie` | Gán raw Cookie header |
+| `-auth` | Basic Auth dạng `username:password` |
+| `-proxy` | HTTP proxy, ví dụ `http://127.0.0.1:8080` |
+| `-k` | Bỏ qua TLS verify |
+| `-follow` | Follow redirect thay vì chỉ in 3xx + Location |
 
-## Filter ket qua directory
+## Filter kết quả directory
 
-`ductu` ho tro match/filter theo metadata response.
+`ductu` hỗ trợ match/filter theo metadata response.
 
-Quy tac:
+Quy tắc:
 
-- Match: tat ca dieu kien match dang bat phai dung.
-- Filter: neu trung bat ky dieu kien filter nao thi bo qua.
-- Sau do moi ap dung `-codes` va `-hide-codes`.
+- Match: tất cả điều kiện match đang bật phải đúng.
+- Filter: nếu trúng bất kỳ điều kiện filter nào thì bỏ qua.
+- Sau đó mới áp dụng `-codes` và `-hide-codes`.
 
-Status code ho tro range:
+Status code hỗ trợ range:
 
 ```bash
 -codes 200,301-303,403
@@ -265,42 +265,42 @@ ductu dir http://target.htb -wd common.txt -mr "admin|login"
 ductu dir http://target.htb -wd common.txt -fr "not found|error"
 ```
 
-Tat dedup body hash:
+Tắt dedup body hash:
 
 ```bash
 ductu dir http://target.htb -wd common.txt -no-dedup
 ```
 
-Doi nguong dedup:
+Đổi ngưỡng dedup:
 
 ```bash
 ductu dir http://target.htb -wd common.txt -dedup-threshold 5
 ```
 
-Luu y: dedup chi loc ket qua cuoi tu thoi diem hash dat nguong. Vi ket qua duoc
-in realtime, cac dong da in truoc do se khong bi xoa khoi terminal.
+Lưu ý: dedup chỉ lọc kết quả cuối từ thời điểm hash đạt ngưỡng. Vì kết quả được
+in realtime, các dòng đã in trước đó sẽ không bị xóa khỏi terminal.
 
-## Extension va path generation
+## Extension và path generation
 
-Mac dinh `-ext-mode append`:
+Mặc định `-ext-mode append`:
 
 ```text
 admin -> admin, admin.php, admin.txt
 ```
 
-Khi wordlist co `%EXT%`, dung `replace`:
+Khi wordlist có `%EXT%`, dùng `replace`:
 
 ```bash
 ductu dir http://target.htb -wd raft.txt -e php,txt -ext-mode replace
 ```
 
-Bo qua extension hoan toan:
+Bỏ qua extension hoàn toàn:
 
 ```bash
 ductu dir http://target.htb -wd common.txt -no-extension
 ```
 
-Them prefix/suffix:
+Thêm prefix/suffix:
 
 ```bash
 ductu dir http://target.htb -wd common.txt -prefixes old-,dev- -suffixes .bak,~
@@ -308,44 +308,44 @@ ductu dir http://target.htb -wd common.txt -prefixes old-,dev- -suffixes .bak,~
 
 ## Recursive scan
 
-Bat recursive:
+Bật recursive:
 
 ```bash
 ductu dir http://target.htb -wd common.txt -r
 ```
 
-Mac dinh depth la `4`. Doi depth:
+Mặc định depth là `4`. Đổi depth:
 
 ```bash
 ductu dir http://target.htb -wd common.txt -r -depth 2
 ```
 
-Strategy mac dinh chi di tiep theo nhung ket qua duoc xem la directory hop ly.
-Greedy strategy se xu ly tiep moi ket qua da pass filter:
+Strategy mặc định chỉ đi tiếp theo những kết quả được xem là directory hợp lý.
+Greedy strategy sẽ xử lý tiếp mọi kết quả đã pass filter:
 
 ```bash
 ductu dir http://target.htb -wd common.txt -r -recursion-strategy greedy
 ```
 
-Loai tru segment khi recursive:
+Loại trừ segment khi recursive:
 
 ```bash
 ductu dir http://target.htb -wd common.txt -r -exclude-subdirs backup,tmp,cache
 ```
 
-`exclude-subdirs` so khop theo segment path, khong phai substring. `backup` se
-khop `/backup/` nhung khong khop `/backup2/`.
+`exclude-subdirs` so khớp theo segment path, không phải substring. `backup` sẽ
+khớp `/backup/` nhưng không khớp `/backup2/`.
 
-## Resume va report
+## Resume và report
 
-Dung resume:
+Dùng resume:
 
 ```bash
 ductu dir http://target.htb -wd common.txt -resume ductu.resume.json
 ```
 
-Neu dung Ctrl+C, tool se co gang luu state. Lan sau chay lai cung config va
-cung file resume, tool se tiep tuc tu phan da scan.
+Nếu dùng Ctrl+C, tool sẽ cố gắng lưu state. Lần sau chạy lại cùng config và
+cùng file resume, tool sẽ tiếp tục từ phần đã scan.
 
 Ghi report JSON:
 
@@ -353,17 +353,17 @@ Ghi report JSON:
 ductu all http://target.htb -ws subs.txt -wd common.txt -o report.json
 ```
 
-Report gom:
+Report gồm:
 
 - Target domain/base URL.
-- Thoi gian bat dau va duration.
+- Thời gian bắt đầu và duration.
 - Wildcard DNS info.
 - Soft-404 info.
-- Danh sach subdomain.
-- Danh sach directory/path.
+- Danh sách subdomain.
+- Danh sách directory/path.
 - Summary.
 
-## Wordlist goi y tren Kali
+## Wordlist gợi ý trên Kali
 
 Subdomain:
 
@@ -382,15 +382,15 @@ Directory:
 /usr/share/seclists/Discovery/Web-Content/big.txt
 ```
 
-Tool cung co lenh:
+Tool cũng có lệnh:
 
 ```bash
 ductu -list-wordlists
 ```
 
-## Vi du thuc chien CTF/lab
+## Ví dụ thực chiến CTF/lab
 
-Subdomain truoc:
+Subdomain trước:
 
 ```bash
 ductu sub bedside.htb \
@@ -398,7 +398,7 @@ ductu sub bedside.htb \
   -dns-extra
 ```
 
-Directory voi extension:
+Directory với extension:
 
 ```bash
 ductu dir http://bedside.htb \
@@ -427,7 +427,7 @@ ductu all http://bedside.htb \
 
 ## Build verify
 
-Chay cac lenh nay truoc khi release:
+Chạy các lệnh này trước khi release:
 
 ```bash
 go test ./...
@@ -435,15 +435,15 @@ go vet ./...
 go build -o ductu .
 ```
 
-Trong moi truong Codex hien tai, `go` khong co trong PATH nen minh khong verify
-duoc build truc tiep o day. Tren Kali co Go thi cac lenh tren se la cach kiem
-tra dung.
+Trong môi trường Codex hiện tại, `go` không có trong PATH nên mình không verify
+được build trực tiếp ở đây. Trên Kali có Go thì các lệnh trên sẽ là cách kiểm
+tra đúng.
 
-## Gioi han
+## Giới hạn
 
-- Wildcard DNS va soft-404 la heuristic, co the loc nham tren target la.
-- `-ct` can internet de query crt.sh.
-- Scan recursive voi wordlist lon co the rat cham va tao nhieu request.
-- Output realtime nen mot so dong da in se khong bi xoa neu sau do bi dedup.
-- Tool khong thay the Burp/ffuf/dirsearch trong moi tinh huong, nhung gon va du
-  tot cho workflow subdomain + directory co ban.
+- Wildcard DNS và soft-404 là heuristic, có thể lọc nhầm trên target lạ.
+- `-ct` cần internet để query crt.sh.
+- Scan recursive với wordlist lớn có thể rất chậm và tạo nhiều request.
+- Output realtime nên một số dòng đã in sẽ không bị xóa nếu sau đó bị dedup.
+- Tool không thay thế Burp/ffuf/dirsearch trong mọi tình huống, nhưng gọn và đủ
+  tốt cho workflow subdomain + directory cơ bản.
